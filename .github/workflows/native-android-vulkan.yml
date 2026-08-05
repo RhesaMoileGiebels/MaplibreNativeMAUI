@@ -48,10 +48,28 @@ jobs:
         timeout-minutes: 60
         run: cmake --build build --target mln-cabi --parallel 4
 
+      # The release build ships with full debug info (~107 MB per ABI vs ~8 MB
+      # for official MapLibre Android). Strip to what the dynamic linker needs;
+      # keep the unstripped copy as a separate artifact for crash symbolication.
+      - name: Strip libmln-cabi.so
+        run: |
+          STRIP="$ANDROID_HOME/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip"
+          SO=$(find build -name libmln-cabi.so)
+          cp "$SO" "$SO.debug"
+          "$STRIP" --strip-unneeded "$SO"
+          echo "libmln-cabi.so: $(du -h "$SO.debug" | cut -f1) unstripped -> $(du -h "$SO" | cut -f1) stripped"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: native-mln-android-${{ matrix.abi }}
           path: build/**/libmln-cabi.so
           if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload debug symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-mln-android-${{ matrix.abi }}-debugsyms
+          path: build/**/libmln-cabi.so.debug
           retention-days: 7
