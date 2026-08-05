@@ -35,6 +35,10 @@ jobs:
       - name: Install NDK 27
         run: sdkmanager "ndk;27.0.12077973"
 
+      # max-page-size=16384: Android 15+ devices can use 16 KB memory pages;
+      # Play Store requires 16 KB-aligned native libs for apps targeting
+      # Android 15+ (XA0141 in .NET Android builds). NDK 27 still defaults
+      # to 4 KB alignment, so pass the flag explicitly.
       - name: Configure CMake
         run: |
           cmake -B build \
@@ -42,6 +46,7 @@ jobs:
             -DANDROID_ABI=${{ matrix.abi }} \
             -DANDROID_PLATFORM=android-23 \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-z,max-page-size=16384" \
             -DMLN_WITH_VULKAN=ON
 
       - name: Build mln-cabi

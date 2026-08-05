@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.5.1-rhike.2
+
+Fork release ([RhesaMoileGiebels/MaplibreNativeMAUI](https://github.com/RhesaMoileGiebels/MaplibreNativeMAUI), branch `rhike-patches`) — same code as 4.5.1-rhike.1, natives rebuilt with 16 KB page-size alignment. Android packages only; not published to NuGet.org.
+
+### ✨ Features and improvements
+- **CI: `libmln-cabi.so` linked with 16 KB page-size alignment** — Android 15+ devices can use 16 KB memory pages and the Play Store requires 16 KB-aligned native libraries for apps targeting Android 15+; .NET Android builds flagged the old 4 KB-aligned library with warning XA0141. `native-android.yml` and `native-android-vulkan.yml` now pass `-Wl,-z,max-page-size=16384` (via `-DCMAKE_SHARED_LINKER_FLAGS`) at CMake configure, so the shipped `libmln-cabi.so` loads on 16 KB-page devices.
+
 ## 4.5.1-rhike.1
 
 Fork release ([RhesaMoileGiebels/MaplibreNativeMAUI](https://github.com/RhesaMoileGiebels/MaplibreNativeMAUI), branch `rhike-patches`) — v4.5.0 plus two patches, both candidates for upstreaming. Android packages only (`MapLibreNative.Maui` + `MapLibreNative.Maui.Handlers`, Android natives); not published to NuGet.org.
