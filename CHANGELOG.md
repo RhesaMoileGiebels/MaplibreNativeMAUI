@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.5.1-rhike.1
+
+Fork release ([RhesaMoileGiebels/MaplibreNativeMAUI](https://github.com/RhesaMoileGiebels/MaplibreNativeMAUI), branch `rhike-patches`) — v4.5.0 plus two patches, both candidates for upstreaming. Android packages only (`MapLibreNative.Maui` + `MapLibreNative.Maui.Handlers`, Android natives); not published to NuGet.org.
+
+### ✨ Features and improvements
+- **CI: `libmln-cabi.so` stripped in Android native builds** — the release .so shipped with full debug info (106.8 MB raw per ABI vs ~8 MB for official MapLibre Android). `llvm-strip --strip-unneeded` now runs after the build in `native-android.yml` and `native-android-vulkan.yml`; the unstripped copy is uploaded as a separate `-debugsyms` artifact for crash symbolication.
+- **`AddSourceJson` / `AddLayerJson` on `IMapLibreMapController`** — both existed on `MbglStyle` and the Windows and macOS/iOS controllers but were missing from the interface and from Android. Now on the interface and implemented on Android. `AddLayerJson` is the only route to style expressions (the typed layer API has none), e.g. `"icon-rotate":["get","bearing"]` + `"icon-rotation-alignment":"map"`.
+
 ## master
 ### ✨ Features and improvements
 - _...Add new stuff here..._
