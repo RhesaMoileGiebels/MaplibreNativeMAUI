@@ -1462,6 +1462,20 @@ public class MapLibreMapController : IMapLibreMapController
         _style.RemoveImage(imageId);
     }
 
+    // ── Style – generic JSON add ──────────────────────────────────────────────
+
+    public void AddSourceJson(string sourceId, string sourceJson)
+    {
+        if (!_styleReady || _style == null) return;
+        _style.AddSourceJson(sourceId, sourceJson);
+    }
+
+    public MbglLayer? AddLayerJson(string layerJson, string? beforeLayerId = null)
+    {
+        if (!_styleReady || _style == null) return null;
+        return _style.AddLayerJson(layerJson, beforeLayerId);
+    }
+
     // -- Helpers ---------------------------------------------------------------
 
     private static void ApplyLayerMeta(MbglLayer layer, string? sourceLayer,

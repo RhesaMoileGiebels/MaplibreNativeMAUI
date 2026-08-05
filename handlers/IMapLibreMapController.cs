@@ -57,6 +57,23 @@ public interface IMapLibreMapController : IMapLibreMapOptionsSink
     public void SetGeoJsonSource(string sourceName, string source);
     public void SetGeoJsonFeature(string sourceName, string geojsonFeature);
     public void RemoveSource(string sourceId);
+
+    // ── Generic JSON source / layer add ──────────────────────────────────────
+    /// <summary>
+    /// Add any style-spec source from a JSON object string, e.g.
+    /// <c>{"type":"geojson","data":{...}}</c>. Complements the typed
+    /// <c>Add*Source</c> methods for source options they don't cover.
+    /// </summary>
+    public void AddSourceJson(string sourceId, string sourceJson);
+
+    /// <summary>
+    /// Add any style-spec layer from a complete layer JSON object (must include
+    /// <c>"id"</c> and <c>"type"</c>). Unlike the typed <c>Add*Layer</c> methods
+    /// this supports expressions in layout/paint properties, e.g.
+    /// <c>"icon-rotate":["get","bearing"]</c>. Returns a non-owning layer handle,
+    /// or null if the style is not ready or the JSON was rejected.
+    /// </summary>
+    public MbglLayer? AddLayerJson(string layerJson, string? beforeLayerId = null);
     
     // Layers
     public void AddSymbolLayer(
