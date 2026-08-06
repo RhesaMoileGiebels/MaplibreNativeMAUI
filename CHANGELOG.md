@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.5.1-rhike.3
+
+Fork release ([RhesaMoileGiebels/MaplibreNativeMAUI](https://github.com/RhesaMoileGiebels/MaplibreNativeMAUI), branch `rhike-patches`). Android packages only; not published to NuGet.org. Both fixes are candidates for upstreaming.
+
+### 🐞 Bug fixes
+- **`GeoJsonSource`: data set after style load never reached the map** — the element materialises on `StyleLoaded`, which runs *before* app-side `StyleLoaded` handlers; with `FeatureCollection` still null the source was never added, and the `FeatureCollection` property-changed callback was empty, so data set afterwards (including live updates such as a 1 Hz GPS marker) went nowhere. Every layer referencing the source silently drew nothing until a style reload (e.g. theme swap) re-materialised the element with data — which looked like "runtime layers need a style reload to appear". `FeatureCollection` changes now push add-or-update into the style (the controller's `AddGeoJsonSource` already updated in place). Shared handler code, fixes all platforms.
+
+### ✨ Features and improvements
+- **Android: MapLibre native log messages forwarded to logcat** — mbgl's default log sink on this build is stderr, which never reaches logcat, so style/source/glyph/sprite errors were invisible on device (e.g. a glyph-range 404 was completely silent). The existing `mbgl_install_log_callback` C API is now wired up in the Android controller; messages appear under the `MapLibre` tag at matching severities.
+
+### 📝 Known behaviour (not a bug, documented here because it cost a day)
+- **Runtime sprite images are overwritten by same-named style sprite images** — mbgl's `Style::Impl::onSpriteLoaded` merges the style's sprite sheet into the image collection *after* the sprite downloads (async, later than `StyleLoaded`), replacing any same-id image registered via `AddSpriteImage` in the meantime. OpenFreeMap's `ofm` sprite defines an image literally named `arrow`, so a custom "arrow" registered at `StyleLoaded` got silently replaced by the style's grey one-way glyph. Namespace custom image ids (e.g. `myapp-arrow`) to avoid collisions.
+
 ## 4.5.1-rhike.2
 
 Fork release ([RhesaMoileGiebels/MaplibreNativeMAUI](https://github.com/RhesaMoileGiebels/MaplibreNativeMAUI), branch `rhike-patches`) — same code as 4.5.1-rhike.1, natives rebuilt with 16 KB page-size alignment. Android packages only; not published to NuGet.org.

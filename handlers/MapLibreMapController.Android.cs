@@ -48,12 +48,32 @@ public class MapLibreMapController : IMapLibreMapController
 
     private static bool s_httpProviderRegistered;
 
+    // Keep the delegate alive for the process lifetime (native side holds the pointer).
+    private static readonly NativeMethods.LogFn s_logFn = OnNativeLog;
+
+    // mbgl's default log sink on this build is stderr (platform/default
+    // logging_stderr.cpp), which never reaches logcat — style/source/image
+    // errors were silently invisible on Android. Forward them to logcat.
+    private static int OnNativeLog(MbglLogLevel level, string category, string message, IntPtr userdata)
+    {
+        var msg = $"[{category}] {message}";
+        switch (level)
+        {
+            case MbglLogLevel.Error:   Android.Util.Log.Error("MapLibre", msg); break;
+            case MbglLogLevel.Warning: Android.Util.Log.Warn("MapLibre", msg);  break;
+            case MbglLogLevel.Info:    Android.Util.Log.Info("MapLibre", msg);  break;
+            default:                   Android.Util.Log.Debug("MapLibre", msg); break;
+        }
+        return 1; // consumed — skip mbgl's stderr sink
+    }
+
     private static void EnsureHttpProviderRegistered()
     {
         if (s_httpProviderRegistered) return;
         s_httpProviderRegistered = true;
         NativeMethods.SetHttpProvider(s_httpProvider, IntPtr.Zero);
         NativeMethods.SetHttpCancelProvider(s_httpCancel, IntPtr.Zero);
+        NativeMethods.InstallLogCallback(s_logFn, IntPtr.Zero);
     }
 
     // Native tells us a request is no longer needed (mbgl superseded the tile,
