@@ -97,6 +97,17 @@ debug-symbol zips.
 not conflict over it. There is no NuGet.org push and there should not be one:
 these packages carry a `-rhike` prerelease suffix and belong only to RHike.
 
+**Upstream's workflows are disabled in this fork's Actions settings**, not in
+the files: CI, Docs, Build and Release, the bump-version PR and the five native
+builds. They trigger on pushes to `main`, which was harmless while `main` was
+the untouched upstream mirror. On 2026-10-17 the patched branch was renamed to
+`main` and the rename fired all three push workflows once: the release stopped
+at its version check and published nothing, CI burned thirteen minutes failing
+on native builds, Docs failed for want of a Pages site. Disabling them in the
+settings keeps the files identical to upstream, so sync stays a plain merge.
+Only `release-rhike.yml` (manual) is active. If a workflow is ever needed on
+this fork, enable it in the settings rather than editing upstream's file.
+
 ---
 
 ## Keeping this fork honest
