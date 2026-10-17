@@ -1,7 +1,9 @@
 # Working in this fork
 
-This is a **fork** of MapLibre Native MAUI, on branch `rhike-patches`, consumed
-by `RHike/Rhike` through `RHike/vendor-packages`.
+This is a **fork** of MapLibre Native MAUI. Its `main` carries the RHike patches
+(the branch was called `rhike-patches` until 2026-10-17); `upstream` mirrors the
+upstream project's `main` untouched, for syncing. Consumed by `RHike/Rhike`
+through `RHike/vendor-packages`.
 
 **Read [FORK.md](FORK.md) first.** It is the only file that describes what is
 different here and why.

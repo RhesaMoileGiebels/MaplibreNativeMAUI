@@ -9,12 +9,12 @@ to drop it.
 
 | | |
 | --- | --- |
-| Branch | `rhike-patches` |
+| Branch | `main` (called `rhike-patches` until 2026-10-17); `upstream` is the untouched mirror of upstream's `main` |
 | Version | `4.5.1-rhike.3`, a prerelease suffix so it can never collide with an upstream release |
 | Consumed by | `RHike/Rhike` through `RHike/vendor-packages` and its `nuget.config` |
 | Published to | GitHub releases on this fork only. **Never NuGet.org.** |
 
-Five commits on top of upstream `main`. Three are build and release plumbing,
+Five commits on top of upstream `main` (our branch `upstream`). Three are build and release plumbing,
 two are functional.
 
 ---
