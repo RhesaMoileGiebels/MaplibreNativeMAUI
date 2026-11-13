@@ -14,8 +14,12 @@ to drop it.
 | Consumed by | `RHike/Rhike` through `RHike/vendor-packages` and its `nuget.config` |
 | Published to | GitHub releases on this fork only. **Never NuGet.org.** |
 
-Five commits on top of upstream `main` (our branch `upstream`). Three are build and release plumbing,
+Five commits on top of upstream `main` as of v4.5.0 (`21fb356`). Three are build and release plumbing,
 two are functional.
+
+Op 2026-11-13 is de tak `upstream` bijgewerkt naar upstream `main` op `dbb3747` (v5.0.0-pre.3). `main` loopt
+daardoor 14 upstream-commits achter (v4.5.1, terrein in 3D en Vulkan); die samenvoegen is een aparte klus, met
+conflicten in de twee Android-workflows, `VERSION` en `handlers/IMapLibreMapController.cs`.
 
 ---
 
